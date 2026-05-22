@@ -60,3 +60,6 @@ function error_class($errors, $field) {
 function error_text($errors, $field) {
     return isset($errors[$field]) ? '<span class="error-msg">' . h($errors[$field]) . '</span>' : '';
 }
+function generateBookingCode($id) {
+    return strtoupper(substr(md5($id . 'salt'), 0, 8));
+}

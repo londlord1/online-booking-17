@@ -6,6 +6,11 @@ define('DB_NAME', 'u95122db_123');
 define('DB_USER', 'u95122db_123');
 define('DB_PASS', '4oATr3vKqMi*');
 define('PER_PAGE', 10);
+define('WORK_START', '09:00');
+define('WORK_END', '18:00');
+define('BREAK_START', '13:00');
+define('BREAK_END', '14:00');
+define('SLOT_INTERVAL', 30);
 
 spl_autoload_register(function($class) {
     $paths = ['repositories/', 'controllers/'];
