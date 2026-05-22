@@ -36,7 +36,7 @@
         <div id="slots"></div>
     </div>
 
-    <input type="hidden" name="appointment_datetime" id="appointment_datetime">
+    <input type="hidden" name="date_time" id="date_time">
 
     <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Создать запись</button>
     <a href="?entity=appointment&action=list" class="cancel-link">Отмена</a>
@@ -47,19 +47,29 @@ const specialistSelect = document.getElementById('specialist_id');
 const objectSelect = document.getElementById('object_id');
 const dateInput = document.getElementById('appointment_date');
 const slotsDiv = document.getElementById('slots');
-const hiddenDatetime = document.getElementById('appointment_datetime');
+const hiddenDatetime = document.getElementById('date_time');
 const submitBtn = document.getElementById('submit-btn');
 let selectedSlot = null;
 
-// Загрузка специалистов при смене объекта (здесь упрощённо загружаем всех, т.к. любой специалист может показывать любой объект)
+// Загрузка специалистов при выборе объекта
 objectSelect.addEventListener('change', function() {
-    fetch('?entity=specialist&action=list&format=json')
+    const oid = this.value;
+    if (!oid) {
+        specialistSelect.innerHTML = '<option value="">-- сначала выберите объект --</option>';
+        return;
+    }
+    specialistSelect.innerHTML = '<option value="">-- загрузка... --</option>';
+    fetch('get_specialists.php')
         .then(r => r.json())
         .then(data => {
-            specialistSelect.innerHTML = '<option value="">-- выберите --</option>';
+            let html = '<option value="">-- выберите --</option>';
             data.forEach(s => {
-                specialistSelect.innerHTML += `<option value="${s.id}">${s.first_name} ${s.last_name}</option>`;
+                html += `<option value="${s.id}">${s.first_name} ${s.last_name}</option>`;
             });
+            specialistSelect.innerHTML = html;
+        })
+        .catch(() => {
+            specialistSelect.innerHTML = '<option value="">-- ошибка загрузки --</option>';
         });
 });
 
@@ -98,14 +108,14 @@ function loadSlots() {
                     submitBtn.disabled = false;
                 });
             });
+        })
+        .catch(() => {
+            slotsDiv.innerHTML = '<p class="error-msg">Ошибка загрузки слотов</p>';
         });
 }
 
 specialistSelect.addEventListener('change', loadSlots);
 dateInput.addEventListener('change', loadSlots);
-
-// Инициализация
-if (objectSelect.value) objectSelect.dispatchEvent(new Event('change'));
 </script>
 
 <?php $content = ob_get_clean(); require __DIR__ . '/../layout.php'; ?>
