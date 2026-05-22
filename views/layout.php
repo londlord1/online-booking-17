@@ -249,9 +249,11 @@
 <body>
     <div class="container">
         <nav>
-            <a href="?entity=client&action=list">Клиенты</a>
-            <a href="?entity=object&action=list">Объекты</a>
-            <a href="?entity=specialist&action=list">Специалисты</a>
+   <a href="?entity=client&action=list">Клиенты</a>
+    <a href="?entity=object&action=list">Объекты</a>
+    <a href="?entity=specialist&action=list">Специалисты</a>
+    <a href="?entity=appointment&action=list">Записи</a>
+    <a href="?entity=appointment&action=reports">Отчёты</a>
         </nav>
         <?php if ($flash = getFlash()): ?>
             <div class="flash <?= $flash['type'] ?>"><?= h($flash['message']) ?></div>
